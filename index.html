@@ -6,32 +6,79 @@
     <title>Document</title>
 </head>
 <body>
+
+    <div id="options"></div>
+    <div id="results"></div>
+
     <script>
-        let computerSelection = computerPlay();
-        let playerSelection;
         let playerScore = 0;
         let computerScore = 0;
-        game();
+        const results = document.querySelector('#results');
+        const content = document.createElement('div');
+        const options = document.querySelector('#options');
+        const start = document.createElement('button');
+        const rock = document.createElement('button');
+        const paper = document.createElement('button');
+        const scissors = document.createElement('button');
+        const p = document.createElement('p');
+        const winner = document.createElement('h3');
+
+        start.innerHTML = 'Start';
+        rock.innerHTML = 'Rock';
+        paper.innerHTML = 'Paper';
+        scissors.innerHTML = 'Scissors';
+
+        options.appendChild(start);
+        results.appendChild(content);
+
+        start.addEventListener('click', () => {
+            game();
+        });
+
+        rock.addEventListener('click', () => {
+            content.textContent = playRound('rock', computerPlay());
+            p.textContent = `Player score: ${playerScore}       Computer score: ${computerScore}`;
+            results.appendChild(p);
+            gameEnd();
+        });
+
+        paper.addEventListener('click', () => {
+            content.textContent = playRound('paper', computerPlay());
+            p.textContent = `Player score: ${playerScore}       Computer score: ${computerScore}`;
+            results.appendChild(p);
+            gameEnd();
+        });
+
+        scissors.addEventListener('click', () => {
+            content.textContent = playRound('scissors', computerPlay());
+            p.textContent = `Player score: ${playerScore}       Computer score: ${computerScore}`;
+            results.appendChild(p);
+            gameEnd();
+        });
 
         function game() {
-            for (let i = 0; i < 5; i++) {
-                console.log(playRound(playerSelection, computerSelection));
-                console.log(`Player score: ${playerScore}   Computer score: ${computerScore}`);
-            }
-            if (playerScore > computerScore) {
-                console.log('You Win! Congrats!');
-            } else if (computerScore > playerScore) {
-                console.log('Computer Wins!');
-            } else {
-                console.log('It\'s a Draw!');
+            options.removeChild(start);
+            options.appendChild(rock);
+            options.appendChild(paper);
+            options.appendChild(scissors);
+        }
+
+        function gameEnd() {
+            if (playerScore == 5 || computerScore == 5) {
+                options.removeChild(rock);
+                options.removeChild(paper);
+                options.removeChild(scissors);
+                if (playerScore == 5) {
+                    winner.textContent = 'You Win! Congrats!';
+                } else {
+                    winner.textContent = 'Computer Wins!';
+                }
+                results.replaceChild(winner, content);
             }
         }
+
         function playRound(playerSelection, computerSelection) {
-            playerSelection = prompt('Rock, Paper or Scissors?: ').toLowerCase();
-            if ((playerSelection != 'rock') && (playerSelection != 'paper') && (playerSelection != 'scissors')) {
-                playerSelection = prompt('Please choose a right option.\nRock, Paper or Scissors?: ');
-            }
-            switch (playerSelection.toLowerCase()) {
+            switch (playerSelection) {
                 case 'rock':
                     if (computerSelection == 'rock') {
                         return 'Draw!';
